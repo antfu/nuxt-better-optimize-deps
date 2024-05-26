@@ -1,6 +1,5 @@
 import { defineNuxtModule } from '@nuxt/kit'
 
-// Module options TypeScript interface definition
 export interface ModuleOptions {}
 
 const excludeList = [
