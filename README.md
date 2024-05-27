@@ -66,7 +66,6 @@ stateDiagram-v2
 
 This usually works well. But when a new dependency is discovered and it uses things from the shared chunk that was not exposed in the chunk entry, for example, `@vueuse/core` deps in `@vue/runtime-core`, the story becomes:
 
-
 ```mermaid
 stateDiagram-v2
   CC: Common Chunk 1ab42e
@@ -141,16 +140,13 @@ Give it a try and share with us how it works to you. Deps on the feedback we mig
 
 Huge thanks to @patak-dev for the disussions and ideas about this solution.
 
-
 <!-- Badges -->
+
 [npm-version-src]: https://img.shields.io/npm/v/nuxt-better-optimize-deps/latest.svg?style=flat&colorA=020420&colorB=00DC82
 [npm-version-href]: https://npmjs.com/package/nuxt-better-optimize-deps
-
 [npm-downloads-src]: https://img.shields.io/npm/dm/nuxt-better-optimize-deps.svg?style=flat&colorA=020420&colorB=00DC82
 [npm-downloads-href]: https://npmjs.com/package/nuxt-better-optimize-deps
-
 [license-src]: https://img.shields.io/npm/l/nuxt-better-optimize-deps.svg?style=flat&colorA=020420&colorB=00DC82
 [license-href]: https://npmjs.com/package/nuxt-better-optimize-deps
-
 [nuxt-src]: https://img.shields.io/badge/Nuxt-020420?logo=nuxt.js
 [nuxt-href]: https://nuxt.com
