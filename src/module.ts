@@ -1,7 +1,19 @@
 import { defineNuxtModule } from '@nuxt/kit'
 
-export interface ModuleOptions {}
+export interface ModuleOptions {
+  /**
+   * Exclude known dependencies from the ecosystem
+   *
+   * @default true
+   */
+  ecosystem?: boolean
+  /**
+   * Additional dependencies to exclude from optimization
+   */
+  exclude?: string[]
+}
 
+// Later these should provided by Nuxt by default
 const excludeList = [
   // Vue
   'vue',
@@ -21,14 +33,20 @@ const excludeList = [
   'hookable',
   'unctx',
   'h3',
+  'defu',
   'ofetch',
   'ufo',
+  '@unhead/vue',
+]
 
-  // Ecosystem
+const ecosystemList = [
+  // Ecosystem - later they should be providede by the ecosystem module
   'pinia',
   '@vueuse/core',
   '@vueuse/shared',
   '@vueuse/math',
+  'primevue',
+  'shiki',
 ]
 
 export default defineNuxtModule<ModuleOptions>({
@@ -36,8 +54,10 @@ export default defineNuxtModule<ModuleOptions>({
     name: 'nuxt-better-optimize-deps',
     configKey: 'betterOptimizeDeps',
   },
-  defaults: {},
-  setup(_options, nuxt) {
+  defaults: {
+    ecosystem: true,
+  },
+  setup(options, nuxt) {
     nuxt.hook('vite:extendConfig', (config, { isServer }) => {
       // Force disable server side discovery
       if (isServer) {
@@ -46,14 +66,27 @@ export default defineNuxtModule<ModuleOptions>({
         return
       }
 
+      const list = [
+        ...excludeList,
+      ]
+
+      if (options.ecosystem)
+        list.push(...ecosystemList)
+
+      if (options.exclude)
+        list.push(...options.exclude)
+
       config.optimizeDeps ||= {}
       // Remove excluded items from include list
-      config.optimizeDeps.include = config.optimizeDeps.include?.filter(x => !excludeList.includes(x)) || []
+      config.optimizeDeps.include = config.optimizeDeps.include
+        ?.filter(x => !list.includes(x)) || []
       // Add excluded items
-      config.optimizeDeps.exclude = Array.from(new Set([
-        ...config.optimizeDeps.exclude || [],
-        ...excludeList,
-      ]))
+      config.optimizeDeps.exclude = []
+
+      for (const item of list) {
+        if (!config.optimizeDeps.exclude.includes(item))
+          config.optimizeDeps.exclude.push(item)
+      }
     })
   },
 })
